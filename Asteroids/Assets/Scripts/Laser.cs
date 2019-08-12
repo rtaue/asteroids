@@ -4,20 +4,12 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    public float velocity = 10f;
     public int damage = 1;
     public float duration = 3f;
-
-    public Rigidbody2D m_rigidbody;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (m_rigidbody == null)
-            m_rigidbody = GetComponent<Rigidbody2D>();
-
-        //m_rigidbody.AddForce(transform.up * velocity * 100 * Time.deltaTime, ForceMode2D.Impulse);
-
         Destroy(gameObject, duration);
     }
 

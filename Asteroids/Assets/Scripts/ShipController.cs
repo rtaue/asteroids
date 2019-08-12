@@ -9,9 +9,10 @@ public class ShipController : MonoBehaviour
     public int health = 3;
     private float turnDirection;
     private float foward;
-    private bool shoot = false;
     public float laserForce = 5f;
     public int laserDamage = 1;
+    public float fireRate = 0.1f;
+    private float fireCounter;
 
     public Rigidbody2D m_rigidbody;
     public Transform m_firePoint;
@@ -29,7 +30,6 @@ public class ShipController : MonoBehaviour
     {
         turnDirection = Input.GetAxis("Horizontal");
         foward = Mathf.Abs(Input.GetAxis("Vertical"));
-        shoot = Input.GetButtonDown("Fire1");
     }
 
     private void FixedUpdate()
@@ -46,8 +46,13 @@ public class ShipController : MonoBehaviour
 
     private void Shoot()
     {
-        if (shoot)
+        if (fireCounter > 0)
+            fireCounter -= Time.deltaTime;
+
+        if (Input.GetButtonDown("Fire1") && fireCounter <= 0)
         {
+            fireCounter = fireRate;
+
             GameObject laser = Instantiate(m_laser, m_firePoint.position, m_firePoint.rotation);
             laser.GetComponent<Laser>().damage = laserDamage;
             laser.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * laserForce * Time.deltaTime, ForceMode2D.Impulse);

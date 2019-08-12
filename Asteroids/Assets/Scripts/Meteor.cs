@@ -8,8 +8,12 @@ public class Meteor : MonoBehaviour
     public float minMaxTorque;
     public int health = 1;
     public int damage = 1;
+    public int maxScore = 200;
+    private float invulTime = 0.5f;
+    private bool invulnerable = true;
 
     public Rigidbody2D m_Rigidbody2D;
+    public GameObject m_MeteorPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +30,16 @@ public class Meteor : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (invulTime > 0)
+        {
+            invulTime -= Time.deltaTime;
+        }
+        else if (invulTime <= 0)
+        {
+            if (invulnerable)
+                invulnerable = !invulnerable;
+        }
+
         Die();
     }
 
@@ -42,25 +56,49 @@ public class Meteor : MonoBehaviour
     {
         if (health <= 0)
         {
-            Destroy(gameObject);
+            Score();
+            DestroyMeteor();
             Debug.Log(gameObject.name + " destroyed!");
         }
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void Score()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        ScoreManager m_ScoreManager = ScoreManager.instance;
+        m_ScoreManager.currentScore += Random.Range(maxScore / 2, maxScore);
+    }
+
+    public void DestroyMeteor()
+    {
+        if (m_MeteorPrefab != null)
         {
-            collision.gameObject.SendMessage("Damage", damage);
-            Destroy(gameObject);
-            Debug.Log(gameObject.name + " hit: " + collision.gameObject.name);
+            for (int i = 0; i < 2; i++)
+            {
+                Instantiate(m_MeteorPrefab, transform.position, Quaternion.identity);
+            }
         }
 
-        if (collision.gameObject.CompareTag("Meteor"))
+        Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!invulnerable)
         {
-            Destroy(gameObject);
-            Debug.Log(gameObject.name + " hit: " + collision.gameObject.name);
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                Score();
+                collision.gameObject.SendMessage("Damage", damage);
+                DestroyMeteor();
+                Debug.Log(gameObject.name + " hit: " + collision.gameObject.name);
+            }
+
+            if (collision.gameObject.CompareTag("Meteor"))
+            {
+                DestroyMeteor();
+                Debug.Log(gameObject.name + " hit: " + collision.gameObject.name);
+            }
         }
     }
 }
