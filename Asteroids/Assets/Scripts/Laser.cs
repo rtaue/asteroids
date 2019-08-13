@@ -13,9 +13,9 @@ public class Laser : MonoBehaviour
         Destroy(gameObject, duration);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Meteor"))
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Meteor"))
         {
             collision.gameObject.SendMessage("Damage", damage);
             Destroy(gameObject);
