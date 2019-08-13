@@ -6,6 +6,13 @@ TagManager:
   tags:
   - Meteor
   - Enemy
+  - Player Laser
+  - Alien UFO
+  - Alien Ship
+  - Alien Laser
+  - Meteor Large
+  - Meteor Medium
+  - Meteor Small
   layers:
   - Default
   - TransparentFX

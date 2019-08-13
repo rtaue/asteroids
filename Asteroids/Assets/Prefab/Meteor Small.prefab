@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5728001497676192518}
   m_Layer: 10
   m_Name: Meteor Small
-  m_TagString: Meteor
+  m_TagString: Meteor Small
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

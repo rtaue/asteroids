@@ -23,8 +23,7 @@ public class AlienController : MonoBehaviour
     public GameObject m_Target;
     public GameObject m_LaserPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
         if (m_Rigidbody2D == null)
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -88,7 +87,7 @@ public class AlienController : MonoBehaviour
     {
         if (health <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             Debug.Log(gameObject.name + " destroyed!");
         }
 

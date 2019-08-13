@@ -15,8 +15,7 @@ public class Meteor : MonoBehaviour
     public Rigidbody2D m_Rigidbody2D;
     public GameObject m_MeteorPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
         if (m_Rigidbody2D == null)
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -79,7 +78,7 @@ public class Meteor : MonoBehaviour
             }
         }
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

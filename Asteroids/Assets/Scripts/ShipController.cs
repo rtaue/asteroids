@@ -14,15 +14,14 @@ public class ShipController : MonoBehaviour
     public float fireRate = 0.1f;
     private float fireCounter;
 
-    public Rigidbody2D m_rigidbody;
-    public Transform m_firePoint;
-    public GameObject m_laser;
+    public Rigidbody2D m_Rigidbody2D;
+    public Transform m_FirePoint;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (m_rigidbody == null)
-            m_rigidbody = GetComponent<Rigidbody2D>();
+        if (m_Rigidbody2D == null)
+            m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -39,7 +38,7 @@ public class ShipController : MonoBehaviour
         float rotation = (-turnDirection) * turnVelocity * Time.deltaTime;
         transform.Rotate(new Vector3(0, 0, rotation));
 
-        m_rigidbody.AddForce(transform.up * foward * boost, ForceMode2D.Force);
+        m_Rigidbody2D.AddForce(transform.up * foward * boost, ForceMode2D.Force);
 
         Shoot();
     }
@@ -53,9 +52,16 @@ public class ShipController : MonoBehaviour
         {
             fireCounter = fireRate;
 
-            GameObject laser = Instantiate(m_laser, m_firePoint.position, m_firePoint.rotation);
-            laser.GetComponent<Laser>().damage = laserDamage;
-            laser.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * laserForce * Time.deltaTime, ForceMode2D.Impulse);
+            GameObject laser = PoolingManager.instance.GetPooledObject("Player Laser");
+            if (laser != null)
+            {
+                laser.transform.position = m_FirePoint.position;
+                laser.transform.rotation = m_FirePoint.rotation;
+                laser.SetActive(enabled);
+                laser.GetComponent<Laser>().damage = laserDamage;
+                laser.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * laserForce * Time.deltaTime, ForceMode2D.Impulse);
+            }
+
             Debug.Log(gameObject.name + " shot!");
         }
 
@@ -66,6 +72,7 @@ public class ShipController : MonoBehaviour
         if (health > 0)
         {
             health -= amount;
+            ResetPosition();
             Debug.Log(gameObject.name + " took damage! -" + amount + " =" + health);
         }
     }
@@ -74,9 +81,15 @@ public class ShipController : MonoBehaviour
     {
         if (health <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             Debug.Log(gameObject.name + " destroyed!");
         }
 
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = Vector2.zero;
+        transform.rotation = Quaternion.Euler(Vector3.zero);
     }
 }

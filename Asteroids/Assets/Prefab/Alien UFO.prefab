@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5655602084304633562}
   m_Layer: 9
   m_Name: Alien UFO
-  m_TagString: Enemy
+  m_TagString: Alien UFO
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
