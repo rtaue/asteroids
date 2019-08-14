@@ -46,16 +46,19 @@ SpriteAtlas:
     - {fileID: 21300000, guid: f39819b0323b697409db2205f71a6b8f, type: 3}
     - {fileID: 21300000, guid: fcf968fae8aabc642846b9778f8edd77, type: 3}
     - {fileID: 21300000, guid: 0ec22d7bf57a0724fbbdbf29dd03c3c3, type: 3}
-    totalSpriteSurfaceArea: 10795
+    - {fileID: 21300000, guid: bdc4bb479e6e48247bdaf7bea5b5d387, type: 3}
+    totalSpriteSurfaceArea: 11917
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: f39819b0323b697409db2205f71a6b8f, type: 3}
+  - {fileID: 21300000, guid: bdc4bb479e6e48247bdaf7bea5b5d387, type: 3}
   - {fileID: 21300000, guid: fcf968fae8aabc642846b9778f8edd77, type: 3}
   - {fileID: 21300000, guid: 0ec22d7bf57a0724fbbdbf29dd03c3c3, type: 3}
   - {fileID: 21300000, guid: e0e8e96f2f0624a4d851653cd467e448, type: 3}
   m_PackedSpriteNamesToIndex:
   - cursor
+  - powerupBlue
   - numeralX
   - playerLife1_blue
   - buttonYellow

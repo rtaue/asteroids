@@ -5,23 +5,29 @@ using UnityEngine.UI;
 
 public class ShipController : MonoBehaviour
 {
+    [Header("Move Properties")]
     public float turnVelocity = 10f;
     public float boost = 10f;
-    public int health = 3;
-    private int lastHealth;
     private float turnDirection;
     private float foward;
-    private bool fire;
+    public Rigidbody2D m_Rigidbody2D;
+
+    [Header("Health Properties")]
+    public int health = 3;
+    private int lastHealth;
+    public Text m_HealthText;
+
+    [Header("Laser Properties")]
     public float laserForce = 5f;
     public int laserDamage = 1;
     public float fireRate = 0.1f;
     private float fireCounter;
+    private bool fire;
+    public Transform m_FirePoint;
+
     private float invulTime = 0.5f;
     private bool invulnerable = true;
 
-    public Rigidbody2D m_Rigidbody2D;
-    public Transform m_FirePoint;
-    public Text m_HealthText;
 
     private void OnEnable()
     {
@@ -35,27 +41,14 @@ public class ShipController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetInput();   
+        GetInput();
 
-        if (lastHealth != health)
-        {
-            lastHealth = health;
-            m_HealthText.text = lastHealth.ToString();
-        }
-
+        SetHealthUI();
     }
 
     private void FixedUpdate()
     {
-        if (invulTime > 0)
-        {
-            invulTime -= Time.deltaTime;
-        }
-        else if (invulTime <= 0)
-        {
-            if (invulnerable)
-                invulnerable = !invulnerable;
-        }
+        Invulnerable();
 
         Die();
 
@@ -64,6 +57,7 @@ public class ShipController : MonoBehaviour
         Shoot();
     }
 
+    //Rotate ship around the z-axis and add force foward to the Rigidbody2D;
     private void PlayerMovement()
     {
         float rotation = (-turnDirection) * turnVelocity * Time.deltaTime;
@@ -72,6 +66,8 @@ public class ShipController : MonoBehaviour
         m_Rigidbody2D.AddForce(transform.up * foward * boost, ForceMode2D.Force);
     }
 
+    //Get a Laser Object from the Object Pooler, position it in the Fire Point position and rotatation,
+    //then add a Relative Force to Laser's Rigidbody2D foward, shoot based on fire rate;
     public void Shoot()
     {
         if (fireCounter > 0)
@@ -94,7 +90,8 @@ public class ShipController : MonoBehaviour
             Debug.Log(gameObject.name + " shot!");
         }
     }
-
+    
+    //Decrease Health based on damage amount received if not invulnerable;
     public void Damage(int amount)
     {
         if (!invulnerable)
@@ -108,6 +105,7 @@ public class ShipController : MonoBehaviour
         }
     }
 
+    //When Health gets to zero disable Player Ship and call GameOver panel;
     public void Die()
     {
         if (health <= 0)
@@ -119,6 +117,7 @@ public class ShipController : MonoBehaviour
 
     }
 
+    //Set Player Ship position to start position (screen center);
     public void ResetPosition()
     {
         invulnerable = true;
@@ -150,5 +149,27 @@ public class ShipController : MonoBehaviour
     public void SetFire(bool fire)
     {
         this.fire = fire;
+    }
+
+    public void SetHealthUI()
+    {
+        if (lastHealth != health)
+        {
+            lastHealth = health;
+            m_HealthText.text = lastHealth.ToString();
+        }
+    }
+
+    public void Invulnerable()
+    {
+        if (invulTime > 0)
+        {
+            invulTime -= Time.deltaTime;
+        }
+        else if (invulTime <= 0)
+        {
+            if (invulnerable)
+                invulnerable = !invulnerable;
+        }
     }
 }

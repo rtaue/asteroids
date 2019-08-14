@@ -34,6 +34,7 @@ public class PoolingManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Create PooledObjects list and objects to it;
         pooledObjects = new List<GameObject>();
         foreach (ObjectPoolItem item in itemsToPool)
         {
@@ -47,14 +48,17 @@ public class PoolingManager : MonoBehaviour
 
     }
 
+    //Get a specific object from PooledObject list;
     public GameObject GetPooledObject(string tag)
     {
         for (int i = 0; i < pooledObjects.Count; i++)
         {
+            //Check if pooled object is not active and matchs tag, then return it;
             if (!pooledObjects[i].activeInHierarchy && pooledObjects[i].tag == tag)
                 return pooledObjects[i];
         }
 
+        //If all pooled objects are in use, then check if it should be expanded then return it;
         foreach (ObjectPoolItem item in itemsToPool)
         {
             if (item.objectToPool.tag == tag)
@@ -71,6 +75,7 @@ public class PoolingManager : MonoBehaviour
         return null;
     }
 
+    //Disable every pooled object in list;
     public void DisablePooledObjects()
     {
         for (int i = 0; i < pooledObjects.Count; i++)

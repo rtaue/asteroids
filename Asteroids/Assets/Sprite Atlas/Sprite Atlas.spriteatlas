@@ -38,7 +38,8 @@ SpriteAtlas:
     - {fileID: 21300000, guid: 3efa5431e4ad41f4f8032ee579a14d18, type: 3}
     - {fileID: 21300000, guid: 2870dee78486e14418d0407c655b670d, type: 3}
     - {fileID: 21300000, guid: 2ab70010ffe09d44a9b4bce490937cf3, type: 3}
-    totalSpriteSurfaceArea: 28635
+    - {fileID: 21300000, guid: d3691735a960d8d4f8992199ebf00792, type: 3}
+    totalSpriteSurfaceArea: 35985
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -46,6 +47,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: ca66d290277139d4b924f5381e1f621c, type: 3}
   - {fileID: 21300000, guid: 3efa5431e4ad41f4f8032ee579a14d18, type: 3}
   - {fileID: 21300000, guid: 46f68e258cc6e8d4d893a6ba7086c9e8, type: 3}
+  - {fileID: 21300000, guid: d3691735a960d8d4f8992199ebf00792, type: 3}
   - {fileID: 21300000, guid: a9947c662839fd04eb82c9c345328d2e, type: 3}
   - {fileID: 21300000, guid: 2870dee78486e14418d0407c655b670d, type: 3}
   - {fileID: 21300000, guid: abe56f1ca98d46a4c9cb4827db8684f4, type: 3}
@@ -55,6 +57,7 @@ SpriteAtlas:
   - meteorBrown_big1
   - meteorBrown_med1
   - enemyGreen1
+  - playerShip3_blue
   - laserBlue16
   - meteorBrown_tiny1
   - laserGreen10
