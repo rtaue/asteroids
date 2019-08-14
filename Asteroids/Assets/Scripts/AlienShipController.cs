@@ -89,10 +89,17 @@ public class AlienShipController : MonoBehaviour
 
     private void Shoot()
     {
-        GameObject laser = Instantiate(m_LaserPrefab, m_FirePoint.position, m_FirePoint.rotation);
-        laser.GetComponent<Laser>().damage = laserDamage;
-        laser.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * laserForce * Time.deltaTime, ForceMode2D.Impulse);
-        Debug.Log(gameObject.name + " shot!");
+        GameObject laser = PoolingManager.instance.GetPooledObject("Alien Laser");
+        if (laser != null)
+        {
+            laser.transform.position = m_FirePoint.position;
+            laser.transform.rotation = m_FirePoint.rotation;
+            laser.SetActive(enabled);
+            laser.GetComponent<Laser>().damage = laserDamage;
+            laser.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * laserForce * Time.deltaTime, ForceMode2D.Impulse);
+
+            Debug.Log(gameObject.name + " shot!");
+        }
     }
 
     public void Damage(int amount)

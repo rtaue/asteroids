@@ -70,4 +70,13 @@ public class PoolingManager : MonoBehaviour
         }
         return null;
     }
+
+    public void DisablePooledObjects()
+    {
+        for (int i = 0; i < pooledObjects.Count; i++)
+        {
+            if (pooledObjects[i].activeInHierarchy)
+                pooledObjects[i].SetActive(false);
+        }  
+    }
 }

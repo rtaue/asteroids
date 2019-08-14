@@ -11,6 +11,7 @@ public class ShipController : MonoBehaviour
     private int lastHealth;
     private float turnDirection;
     private float foward;
+    private bool fire;
     public float laserForce = 5f;
     public int laserDamage = 1;
     public float fireRate = 0.1f;
@@ -22,8 +23,7 @@ public class ShipController : MonoBehaviour
     public Transform m_FirePoint;
     public Text m_HealthText;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
         if (m_Rigidbody2D == null)
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -35,8 +35,7 @@ public class ShipController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        turnDirection = Input.GetAxis("Horizontal");
-        foward = Mathf.Abs(Input.GetAxis("Vertical"));
+        GetInput();   
 
         if (lastHealth != health)
         {
@@ -73,12 +72,12 @@ public class ShipController : MonoBehaviour
         m_Rigidbody2D.AddForce(transform.up * foward * boost, ForceMode2D.Force);
     }
 
-    private void Shoot()
+    public void Shoot()
     {
         if (fireCounter > 0)
             fireCounter -= Time.deltaTime;
 
-        if (Input.GetButtonDown("Fire1") && fireCounter <= 0)
+        if (fire && fireCounter <= 0)
         {
             fireCounter = fireRate;
 
@@ -94,7 +93,6 @@ public class ShipController : MonoBehaviour
 
             Debug.Log(gameObject.name + " shot!");
         }
-
     }
 
     public void Damage(int amount)
@@ -115,6 +113,7 @@ public class ShipController : MonoBehaviour
         if (health <= 0)
         {
             gameObject.SetActive(false);
+            GameManager.instance.GameOver();
             Debug.Log(gameObject.name + " destroyed!");
         }
 
@@ -126,5 +125,30 @@ public class ShipController : MonoBehaviour
         invulTime = 2f;
         transform.position = Vector2.zero;
         transform.rotation = Quaternion.Euler(Vector3.zero);
+    }
+
+    public void GetInput()
+    {
+        if (!InputSystem.instance.touchInput)
+        {
+            turnDirection = Input.GetAxis("Horizontal");
+            foward = Mathf.Abs(Input.GetAxis("Vertical"));
+            fire = Input.GetButtonDown("Fire1");
+        }
+    }
+
+    public void SetTurnDirection(float direction)
+    {
+        turnDirection = direction;
+    }
+
+    public void SetFoward(float foward)
+    {
+        this.foward = foward;
+    }
+
+    public void SetFire(bool fire)
+    {
+        this.fire = fire;
     }
 }

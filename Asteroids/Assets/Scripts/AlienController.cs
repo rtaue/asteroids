@@ -13,6 +13,8 @@ public class AlienController : MonoBehaviour
 
     public float spin;
 
+    public float laserForce = 500f;
+    public int laserDamage = 1;
     public float fireRate = 2f;
     public float fireCounter;
 
@@ -73,8 +75,16 @@ public class AlienController : MonoBehaviour
         Vector3 dir = m_Target.transform.position - transform.position;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Quaternion rot = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
-        GameObject laser = Instantiate(m_LaserPrefab, transform.position, rot);
-        laser.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * 500 * Time.deltaTime, ForceMode2D.Impulse);
+
+        GameObject laser = PoolingManager.instance.GetPooledObject("Alien Laser");
+        if (laser != null)
+        {
+            laser.transform.position = transform.position;
+            laser.transform.rotation = rot;
+            laser.SetActive(enabled);
+            laser.GetComponent<Laser>().damage = laserDamage;
+            laser.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * laserForce * Time.deltaTime, ForceMode2D.Impulse);
+        }
     }
 
     public void Damage(int amount)

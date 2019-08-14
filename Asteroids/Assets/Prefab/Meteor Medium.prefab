@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3022217191137312165}
   - component: {fileID: 8303630728294504053}
   - component: {fileID: 3067631558789721860}
-  - component: {fileID: 836977088352918079}
+  - component: {fileID: 7264103262778682327}
   - component: {fileID: 302520588063900056}
   m_Layer: 10
   m_Name: Meteor Medium
@@ -104,8 +104,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &836977088352918079
-PolygonCollider2D:
+--- !u!58 &7264103262778682327
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -118,23 +118,8 @@ PolygonCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.71666664, y: 0.71666664}
-    newSize: {x: 0.43, y: 0.43}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.35591388, y: -0.12485665}
-      - {x: 0.28772962, y: 0.32158569}
-      - {x: -0.16288567, y: 0.33180317}
-      - {x: -0.35757494, y: 0.06703335}
-      - {x: -0.250628, y: -0.26603872}
-      - {x: 0.0005172491, y: -0.35842592}
+  serializedVersion: 2
+  m_Radius: 0.3
 --- !u!114 &302520588063900056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,4 +138,8 @@ MonoBehaviour:
   damage: 1
   maxScore: 200
   meteorTag: Meteor Small
+  spawnMeteor: 1
+  meteorQuantity: 2
+  randomSpawn: 0
+  maxMeteorQuantity: 3
   m_Rigidbody2D: {fileID: 0}

@@ -8,10 +8,26 @@ public class Laser : MonoBehaviour
     public float duration = 3f;
     private float counter;
 
+    public AudioSource m_AudioSource;
+    public AudioClip laserClip;
+
     // Start is called before the first frame update
     void OnEnable()
     {
+        if (m_AudioSource == null)
+            m_AudioSource = GetComponent<AudioSource>();
+
+        m_AudioSource.clip = laserClip;
+
+        if (!m_AudioSource.isPlaying)
+            m_AudioSource.Play();
+
         counter = duration;
+    }
+
+    private void OnDisable()
+    {
+        m_AudioSource.Stop();
     }
 
     private void FixedUpdate()

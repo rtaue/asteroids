@@ -32,14 +32,14 @@ public class LevelManager : MonoBehaviour
     public List<Level> levels;
 
     public int currentLevel = 1;
-    private int lastLevel;
     private int level;
     public int count;
 
     public float startWait;
     public float spawnInterval;
-    private float nextLevelWait = 2f;
+    private float nextLevelWait = 4f;
     private float counter;
+    private bool start = false;
 
     public Text m_LevelText;
     public GameObject m_Player;
@@ -47,46 +47,47 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        lastLevel = currentLevel;
         level = currentLevel - 1;
-        m_LevelText.text = "Level " + currentLevel.ToString("00");
-
-        StartCoroutine(StartLevel(levels[level]));
     }
 
     private void FixedUpdate()
     {
-        if (lastLevel != currentLevel)
+        if (start)
         {
-            lastLevel = currentLevel;
-            m_LevelText.text = "Level " + currentLevel.ToString("00");
-        }
-
-        if (count <= 0)
-        {
-            counter += Time.deltaTime;
-            if (counter >= nextLevelWait)
+            if (count <= 0)
+            {
+                counter += Time.deltaTime;
+                if (counter >= nextLevelWait)
+                {
+                    counter = 0;
+                    currentLevel++;
+                    if (currentLevel < 12)
+                        level++;
+                    StartCoroutine(StartLevel(levels[level]));
+                }
+            }
+            else if (counter != 0)
             {
                 counter = 0;
-                currentLevel++;
-                if (currentLevel < 12)
-                    level++;
-                StartCoroutine(StartLevel(levels[level]));
             }
-        }
-        else if (counter != 0)
-        {
-            counter = 0;
         }
     }
 
     IEnumerator StartLevel(Level level)
     {
+        start = false;
+
+        m_LevelText.text = "Level " + currentLevel.ToString("00");
+
+        if (!m_Player.activeSelf)
+            m_Player.SetActive(true);
         m_Player.GetComponent<ShipController>().ResetPosition();
         if (m_Player.GetComponent<ShipController>().health < 3)
             m_Player.GetComponent<ShipController>().health = 3;
 
         yield return new WaitForSeconds(startWait);
+
+        start = true;
 
         if (level.meteorQuantity > 0)
         {
@@ -123,6 +124,12 @@ public class LevelManager : MonoBehaviour
         StopAllCoroutines();
     }
 
+    public void StartLevel()
+    {
+        StopAllCoroutines();
+        StartCoroutine(StartLevel(levels[level]));
+    }
+
     private Vector2 GetMeteorSpawnPosition()
     {
         Camera m_Camera = Camera.main;
@@ -153,5 +160,24 @@ public class LevelManager : MonoBehaviour
 
         Vector2 newPosition = new Vector2(x, y);
         return newPosition;
+    }
+
+    public void ResetLevel()
+    {
+        start = false;
+        currentLevel = 1;
+        level = currentLevel - 1;
+        count = 0;
+        m_Player.SetActive(false);
+
+        ScoreManager.instance.currentScore = 0;
+        PoolingManager.instance.DisablePooledObjects();
+    }
+
+    public void RestartLevel()
+    {
+        start = false;
+        ResetLevel();
+        StartLevel();
     }
 }
