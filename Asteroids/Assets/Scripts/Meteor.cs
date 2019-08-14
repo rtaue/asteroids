@@ -9,11 +9,13 @@ public class Meteor : MonoBehaviour
     public int health = 1;
     public int damage = 1;
     public int maxScore = 200;
-    private float invulTime = 0.5f;
-    private bool invulnerable = true;
+    public string meteorTag = null;
+    public bool spawnMeteor = true;
+    public int meteorQuantity = 2;
+    public bool randomSpawn = false;
+    public int maxMeteorQuantity = 3;
 
     public Rigidbody2D m_Rigidbody2D;
-    public GameObject m_MeteorPrefab;
 
     private void OnEnable()
     {
@@ -25,20 +27,12 @@ public class Meteor : MonoBehaviour
 
         m_Rigidbody2D.AddForce(force, ForceMode2D.Force);
         m_Rigidbody2D.AddTorque(torque);
+
+        health = 1;
     }
 
     private void FixedUpdate()
     {
-        if (invulTime > 0)
-        {
-            invulTime -= Time.deltaTime;
-        }
-        else if (invulTime <= 0)
-        {
-            if (invulnerable)
-                invulnerable = !invulnerable;
-        }
-
         Die();
     }
 
@@ -70,33 +64,57 @@ public class Meteor : MonoBehaviour
 
     public void DestroyMeteor()
     {
-        if (m_MeteorPrefab != null)
-        {
-            for (int i = 0; i < 2; i++)
-            {
-                Instantiate(m_MeteorPrefab, transform.position, Quaternion.identity);
-            }
-        }
-
+        SpawnMeteor();
+        LevelManager.instance.count--;
         gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!invulnerable)
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Player Laser"))
         {
-            if (collision.gameObject.CompareTag("Player"))
+            Score();
+            collision.gameObject.SendMessage("Damage", damage);
+            DestroyMeteor();
+            Debug.Log(gameObject.name + " hit: " + collision.gameObject.name);
+        }
+    }
+
+    private void SpawnMeteor()
+    {
+        if (spawnMeteor)
+        {
+            int n;
+            if (randomSpawn)
             {
-                Score();
-                collision.gameObject.SendMessage("Damage", damage);
-                DestroyMeteor();
-                Debug.Log(gameObject.name + " hit: " + collision.gameObject.name);
+                n = Random.Range(1, maxMeteorQuantity);
+            }
+            else
+            {
+                n = meteorQuantity;
             }
 
-            if (collision.gameObject.CompareTag("Meteor"))
+            for (int i = 0; i < n; i++)
             {
-                DestroyMeteor();
-                Debug.Log(gameObject.name + " hit: " + collision.gameObject.name);
+                GameObject obj = PoolingManager.instance.GetPooledObject(meteorTag);
+                float width = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector2(0, 0)), Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0)));
+                float height = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector2(0, 0)), Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height)));
+                Vector3 viewportPosition = Camera.main.WorldToViewportPoint(transform.position);
+                Vector3 newPosition = transform.position;
+
+                if (viewportPosition.x > 1)
+                    newPosition.x = width / 2;
+                else if (viewportPosition.x < 0)
+                    newPosition.x = -width / 2;
+
+                if (viewportPosition.y > 1)
+                    newPosition.y = height / 2;
+                else if (viewportPosition.y < 0)
+                    newPosition.y = -height / 2;
+
+                obj.transform.position = newPosition;
+                obj.SetActive(true);
+                LevelManager.instance.count++;
             }
         }
     }

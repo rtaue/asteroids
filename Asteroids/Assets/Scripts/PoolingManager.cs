@@ -25,6 +25,7 @@ public class PoolingManager : MonoBehaviour
 
         instance = this;
     }
+
     #endregion
 
     public List<ObjectPoolItem> itemsToPool;

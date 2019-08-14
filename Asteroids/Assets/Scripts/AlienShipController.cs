@@ -20,6 +20,9 @@ public class AlienShipController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (m_Target == null)
+            m_Target = GameObject.FindGameObjectWithTag("Player");
+
         laserCounter = laserRate;
     }
 
@@ -106,6 +109,7 @@ public class AlienShipController : MonoBehaviour
         if (health <= 0)
         {
             gameObject.SetActive(false);
+            LevelManager.instance.count--;
             Debug.Log(gameObject.name + " destroyed!");
         }
 

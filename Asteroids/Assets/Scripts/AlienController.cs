@@ -25,6 +25,9 @@ public class AlienController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (m_Target == null)
+            m_Target = GameObject.FindGameObjectWithTag("Player");
+
         if (m_Rigidbody2D == null)
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
 
@@ -88,6 +91,7 @@ public class AlienController : MonoBehaviour
         if (health <= 0)
         {
             gameObject.SetActive(false);
+            LevelManager.instance.count--;
             Debug.Log(gameObject.name + " destroyed!");
         }
 

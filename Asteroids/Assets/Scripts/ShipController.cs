@@ -1,27 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShipController : MonoBehaviour
 {
     public float turnVelocity = 10f;
     public float boost = 10f;
     public int health = 3;
+    private int lastHealth;
     private float turnDirection;
     private float foward;
     public float laserForce = 5f;
     public int laserDamage = 1;
     public float fireRate = 0.1f;
     private float fireCounter;
+    private float invulTime = 0.5f;
+    private bool invulnerable = true;
 
     public Rigidbody2D m_Rigidbody2D;
     public Transform m_FirePoint;
+    public Text m_HealthText;
 
     // Start is called before the first frame update
     void Start()
     {
         if (m_Rigidbody2D == null)
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
+
+        lastHealth = health;
+        m_HealthText.text = lastHealth.ToString();
     }
 
     // Update is called once per frame
@@ -29,18 +37,40 @@ public class ShipController : MonoBehaviour
     {
         turnDirection = Input.GetAxis("Horizontal");
         foward = Mathf.Abs(Input.GetAxis("Vertical"));
+
+        if (lastHealth != health)
+        {
+            lastHealth = health;
+            m_HealthText.text = lastHealth.ToString();
+        }
+
     }
 
     private void FixedUpdate()
     {
+        if (invulTime > 0)
+        {
+            invulTime -= Time.deltaTime;
+        }
+        else if (invulTime <= 0)
+        {
+            if (invulnerable)
+                invulnerable = !invulnerable;
+        }
+
         Die();
 
+        PlayerMovement();
+
+        Shoot();
+    }
+
+    private void PlayerMovement()
+    {
         float rotation = (-turnDirection) * turnVelocity * Time.deltaTime;
         transform.Rotate(new Vector3(0, 0, rotation));
 
         m_Rigidbody2D.AddForce(transform.up * foward * boost, ForceMode2D.Force);
-
-        Shoot();
     }
 
     private void Shoot()
@@ -69,11 +99,14 @@ public class ShipController : MonoBehaviour
 
     public void Damage(int amount)
     {
-        if (health > 0)
+        if (!invulnerable)
         {
-            health -= amount;
-            ResetPosition();
-            Debug.Log(gameObject.name + " took damage! -" + amount + " =" + health);
+            if (health > 0)
+            {
+                health -= amount;
+                ResetPosition();
+                Debug.Log(gameObject.name + " took damage! -" + amount + " =" + health);
+            }
         }
     }
 
@@ -89,6 +122,8 @@ public class ShipController : MonoBehaviour
 
     public void ResetPosition()
     {
+        invulnerable = true;
+        invulTime = 2f;
         transform.position = Vector2.zero;
         transform.rotation = Quaternion.Euler(Vector3.zero);
     }

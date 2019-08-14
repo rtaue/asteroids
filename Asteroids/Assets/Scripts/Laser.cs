@@ -26,8 +26,10 @@ public class Laser : MonoBehaviour
         GameObject obj = (collision != null) ? collision.gameObject : null;
         if (obj != null)
         {
-            Debug.Log("Collision detected!");
-            if (obj.layer == LayerMask.NameToLayer("Player") || obj.layer == LayerMask.NameToLayer("Enemy") || obj.layer == LayerMask.NameToLayer("Meteor"))
+            //Debug.Log("Collision detected!");
+            if (obj.layer == LayerMask.NameToLayer("Player") 
+                || obj.layer == LayerMask.NameToLayer("Enemy") 
+                || obj.layer == LayerMask.NameToLayer("Meteor"))
             {
                 obj.SendMessage("Damage", damage);
                 gameObject.SetActive(false);

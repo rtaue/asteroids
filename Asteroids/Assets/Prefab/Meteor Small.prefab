@@ -151,5 +151,9 @@ MonoBehaviour:
   health: 1
   damage: 1
   maxScore: 200
+  meteorTag: 
+  spawnMeteor: 0
+  meteorQuantity: 2
+  randomSpawn: 0
+  maxMeteorQuantity: 3
   m_Rigidbody2D: {fileID: 0}
-  m_MeteorPrefab: {fileID: 0}

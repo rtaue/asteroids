@@ -159,6 +159,5 @@ MonoBehaviour:
   health: 1
   damage: 1
   maxScore: 200
+  meteorTag: Meteor Medium
   m_Rigidbody2D: {fileID: 0}
-  m_MeteorPrefab: {fileID: 7699135781847130671, guid: f4bc99f0f104b7b41a44cd2577ba790a,
-    type: 3}
